@@ -1,7 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { db } from "@/db/drizzle";
-import { subscription } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { Subscription } from "@/db/schema";
 
 export type SubscriptionDetails = {
   id: string;
@@ -33,10 +31,15 @@ export async function getSubscriptionDetails(): Promise<SubscriptionDetailsResul
       return { hasSubscription: false };
     }
 
-    const userSubscriptions = await db
-      .select()
-      .from(subscription)
-      .where(eq(subscription.userId, user.id));
+    const { data: userSubscriptions, error: dbError } = await supabase
+      .from('subscription')
+      .select('*')
+      .eq('userId', user.id)
+
+    if (dbError) {
+      console.error("Error fetching subscriptions:", dbError);
+      return { hasSubscription: false, error: dbError.message, errorType: "GENERAL" };
+    }
 
     if (!userSubscriptions.length) {
       return { hasSubscription: false };
