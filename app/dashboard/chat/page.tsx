@@ -7,14 +7,33 @@ import { useChat } from "@ai-sdk/react";
 import Markdown from "react-markdown";
 
 export default function Chat() {
-  const { messages, input, handleInputChange, handleSubmit } = useChat({
-    maxSteps: 10,
+  const { messages, input, handleInputChange, handleSubmit, isLoading, error } = useChat({
+    api: "/api/chat",
+    onError: (error) => {
+      console.error("Chat error:", error);
+    },
+    onResponse: (response) => {
+      console.log("Chat response:", response.status, response.statusText);
+    },
+    onFinish: (message) => {
+      console.log("Chat finished:", message);
+    }
   });
+
+  // Debug logging
+  console.log("Current messages:", messages);
+  console.log("Is loading:", isLoading);
+  console.log("Error:", error);
 
   return (
     <div className="flex flex-col w-full py-24 justify-center items-center">
+      {error && (
+        <div className="w-full max-w-xl mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+          Error: {error.message}
+        </div>
+      )}
       <div className="w-full max-w-xl space-y-4 mb-20">
-        {messages.map((message, i) => (
+        {messages.map((message) => (
           <div
             key={message.id}
             className={cn(
@@ -30,24 +49,19 @@ export default function Chat() {
                   : "bg-[#E9E9EB] text-black rounded-2xl rounded-bl-sm",
               )}
             >
-              {message.parts.map((part) => {
-                switch (part.type) {
-                  case "text":
-                    return (
-                      <div
-                        key={`${message.id}-${i}`}
-                        className="prose-sm prose-p:my-0.5 prose-li:my-0.5 prose-ul:my-1 prose-ol:my-1"
-                      >
-                        <Markdown>{part.text}</Markdown>
-                      </div>
-                    );
-                  default:
-                    return null;
-                }
-              })}
+              <div className="prose-sm prose-p:my-0.5 prose-li:my-0.5 prose-ul:my-1 prose-ol:my-1">
+                <Markdown>{message.content}</Markdown>
+              </div>
             </div>
           </div>
         ))}
+        {isLoading && (
+          <div className="flex justify-start">
+            <div className="max-w-[65%] px-3 py-1.5 text-sm shadow-sm bg-[#E9E9EB] text-black rounded-2xl rounded-bl-sm">
+              <div className="animate-pulse">Thinking...</div>
+            </div>
+          </div>
+        )}
       </div>
 
       <form
@@ -60,10 +74,11 @@ export default function Chat() {
             value={input}
             placeholder="Say something..."
             onChange={handleInputChange}
+            disabled={isLoading}
           />
           <div className="flex justify-end gap-3 items-center w-full">
-            <Button size="sm" className="text-xs">
-              Send
+            <Button size="sm" className="text-xs" type="submit" disabled={isLoading}>
+              {isLoading ? "Sending..." : "Send"}
             </Button>
           </div>
         </div>

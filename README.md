@@ -14,6 +14,7 @@ This project is a Next.js starter kit with a comprehensive set of features for b
 - **UI Components:** [Shadcn UI](https://ui.shadcn.com/)
 - **Authentication:** [Supabase Auth](https://supabase.com/docs/guides/auth)
 - **Database:** [Supabase](https://supabase.com/)
+- **AI Integration:** [Google Gemini](https://ai.google.dev/)
 - **Subscription Management:** [Polar](https://polar.sh/)
 - **Image Uploads:** [UploadThing](https://uploadthing.com/)
 
@@ -362,3 +363,45 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ---
 
 Built with ❤️ using Next.js and modern web technologies.
+
+## Chat Functionality
+
+The application includes an AI-powered chat feature using Google's Gemini 2.5 Flash model. The chat functionality:
+
+- **Real-time streaming**: Messages are streamed in real-time for a responsive chat experience
+- **Modern UI**: Clean, iMessage-style chat interface with proper message alignment
+- **Markdown support**: Supports rich text formatting in responses
+- **Error handling**: Robust error handling with user-friendly messages
+- **Loading states**: Visual feedback during message processing
+
+### Chat Implementation
+
+- **API Route**: `/app/api/chat/route.ts` - Handles chat requests and integrates with Google Gemini API
+- **Chat Page**: `/app/dashboard/chat/page.tsx` - Main chat interface using AI SDK React hooks
+- **Model**: Uses `gemini-2.5-flash` with thinking disabled for faster responses
+
+## Environment Setup
+
+Before running the application, you need to set up the following environment variables:
+
+```bash
+# Supabase Configuration
+NEXT_PUBLIC_SUPABASE_URL="your_supabase_url_here"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="your_supabase_anon_key_here"
+
+# Google Gemini API
+GEMINI_API_KEY="your_gemini_api_key_here"
+```
+
+### Getting API Keys
+
+1. **Google Gemini API Key**: 
+   - Visit [Google AI Studio](https://ai.google.dev/)
+   - Create a new API key
+   - Add it to your `.env.local` file as `GEMINI_API_KEY`
+
+2. **Supabase Configuration**:
+   - Create a project at [Supabase](https://supabase.com/)
+   - Copy your project URL and anon key from the project settings
+
+## Authentication
