@@ -1,8 +1,7 @@
-import { auth } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
 import { db } from "@/db/drizzle";
 import { subscription } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { headers } from "next/headers";
 
 export type SubscriptionDetails = {
   id: string;
@@ -27,18 +26,17 @@ export type SubscriptionDetailsResult = {
 
 export async function getSubscriptionDetails(): Promise<SubscriptionDetailsResult> {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
 
-    if (!session?.user?.id) {
+    if (!user) {
       return { hasSubscription: false };
     }
 
     const userSubscriptions = await db
       .select()
       .from(subscription)
-      .where(eq(subscription.userId, session.user.id));
+      .where(eq(subscription.userId, user.id));
 
     if (!userSubscriptions.length) {
       return { hasSubscription: false };

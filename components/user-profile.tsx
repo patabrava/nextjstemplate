@@ -1,70 +1,36 @@
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { authClient } from "@/lib/auth-client";
-import { Loader2 } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState, useCallback } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { createClient } from '@/lib/supabase/client'
+import { useEffect, useState } from 'react'
 
 interface UserInfo {
-  id: string;
-  name: string;
-  image?: string | null | undefined;
-  email: string;
-  emailVerified: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  id: string
+  name: string
+  image?: string | null | undefined
+  email: string
 }
 
 export default function UserProfile({ mini }: { mini?: boolean }) {
-  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
-
-  const fetchUserData = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const result = await authClient.getSession();
-
-      if (!result.data?.user) {
-        router.push("/sign-in");
-        return;
-      }
-
-      setUserInfo(result.data?.user);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-      setError("Failed to load user profile. Please try refreshing the page.");
-    } finally {
-      setLoading(false);
-    }
-  }, [router]);
+  const supabase = createClient()
+  const [user, setUser] = useState<UserInfo | null>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetchUserData();
-  }, [fetchUserData]);
+    const getUser = async () => {
+      const { data, error } = await supabase.auth.getUser()
+      if (error) {
+        console.error('Error fetching user:', error)
+        setLoading(false)
+        return
+      }
+      setUser(data.user as UserInfo)
+      setLoading(false)
+    }
+    getUser()
+  }, [supabase])
 
   const handleSignOut = async () => {
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          router.push("/sign-in"); // redirect to login page
-        },
-      },
-    });
-  };
+    await supabase.auth.signOut()
+    window.location.href = '/sign-in'
+  }
 
   if (error) {
     return (

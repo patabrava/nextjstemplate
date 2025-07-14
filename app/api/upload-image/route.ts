@@ -1,3 +1,4 @@
+import { createClient } from "@/lib/supabase/server";
 import { uploadImageAssets } from "@/lib/upload-image";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -6,6 +7,13 @@ export const config = {
 };
 
 export async function POST(req: NextRequest) {
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     // Parse the form data
     const formData = await req.formData();
