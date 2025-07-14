@@ -8,12 +8,20 @@ export default function SignInPage() {
   const supabase = createClient()
 
   const handleSignIn = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${location.origin}/api/auth/callback`,
-      },
-    })
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/api/auth/callback`,
+        },
+      })
+      
+      if (error) {
+        console.error('Sign-in error:', error)
+      }
+    } catch (err) {
+      console.error('Unexpected sign-in error:', err)
+    }
   }
 
   return (
