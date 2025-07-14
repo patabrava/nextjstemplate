@@ -85,11 +85,15 @@ export default function PricingTable({
     }
   };
 
-  const STARTER_TIER = process.env.NEXT_PUBLIC_STARTER_TIER;
-  const STARTER_SLUG = process.env.NEXT_PUBLIC_STARTER_SLUG;
+  const STARTER_TIER = process.env.NEXT_PUBLIC_STARTER_TIER || "starter-tier-placeholder";
+  const STARTER_SLUG = process.env.NEXT_PUBLIC_STARTER_SLUG || "starter-slug-placeholder";
 
-  if (!STARTER_TIER || !STARTER_SLUG) {
-    throw new Error("Missing required environment variables for Starter tier");
+  // Temporarily comment out to allow app to run without Polar configuration
+  // TODO: Configure Polar.sh environment variables
+  if (!process.env.NEXT_PUBLIC_STARTER_TIER || !process.env.NEXT_PUBLIC_STARTER_SLUG) {
+    console.warn("Missing Polar.sh environment variables. Please configure NEXT_PUBLIC_STARTER_TIER and NEXT_PUBLIC_STARTER_SLUG in .env.local");
+    // For now, provide fallback values or skip Polar-dependent features
+    // throw new Error("Missing required environment variables for Starter tier");
   }
 
   const isCurrentPlan = (tierProductId: string) => {

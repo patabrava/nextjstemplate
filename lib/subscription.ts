@@ -26,7 +26,7 @@ export type SubscriptionDetailsResult = {
 
 export async function getSubscriptionDetails(): Promise<SubscriptionDetailsResult> {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
