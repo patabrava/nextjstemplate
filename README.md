@@ -12,11 +12,10 @@ This project is a Next.js starter kit with a comprehensive set of features for b
 - **Language:** [TypeScript](https://www.typescriptlang.org/)
 - **Styling:** [Tailwind CSS](https://tailwindcss.com/)
 - **UI Components:** [Shadcn UI](https://ui.shadcn.com/)
-- **Authentication:** [Supabase Auth](https://supabase.com/docs/guides/auth)
-- **Database:** [Supabase](https://supabase.com/)
+- **Authentication:** [Supabase MCP](https://supabase.com/docs/guides/auth) 
+- **Database:** [Supabase MCP](https://supabase.com/)
 - **AI Integration:** [Google Gemini](https://ai.google.dev/)
 - **Subscription Management:** [Polar](https://polar.sh/)
-- **Image Uploads:** [UploadThing](https://uploadthing.com/)
 
 ## Project Structure
 
@@ -98,13 +97,13 @@ The application uses the Next.js App Router for routing. The main pages are:
 
 ## Authentication
 
-Authentication is handled using [Supabase Auth](https://supabase.com/docs/guides/auth). The `lib/auth.ts` file provides helper functions for getting the current user and session. The `lib/supabase/server.ts` and `lib/supabase/client.ts` files configure the Supabase client for server-side and client-side usage, respectively.
+Authentication is handled using [Supabase MCP](https://supabase.com/docs/guides/auth). The `lib/auth.ts` file provides helper functions for getting the current user and session. The `lib/supabase/server.ts` and `lib/supabase/client.ts` files configure the Supabase MCP client for server-side and client-side usage, respectively.
 
 The `middleware.ts` file protects routes by checking for a valid session.
 
 ## Database
 
-The project uses [Supabase](https://supabase.com/) for its database. The database schema is defined in `db/schema.ts`. The schema includes a `Subscription` table for managing user subscriptions.
+The project uses [Supabase MCP](https://supabase.com/) for its database. The database schema is defined in `db/schema.ts`. The schema includes a `Subscription` table for managing user subscriptions.
 
 ## Styling
 
@@ -165,12 +164,10 @@ The project uses several other libraries and utilities:
 - **Framework**: Next.js 15.3.1 with App Router
 - **Language**: TypeScript with strict mode
 - **Styling**: Tailwind CSS v4 + shadcn/ui
-- **Database**: Supabase
-- **Authentication**: Supabase
-
+- **Database**: Supabase MCP
+- **Authentication**: Supabase MCP
 - **Payments**: Polar.sh
-- **AI**: OpenAI SDK
-- **Storage**: Cloudflare R2
+- **AI**: Google Gemini
 - **Analytics**: PostHog
 - **Deployment**: Vercel (recommended)
 
@@ -203,11 +200,9 @@ The project uses several other libraries and utilities:
 
 ### Prerequisites
 - Node.js 18+
-- Supabase MCPS
-- Cloudflare R2 bucket for file storage
+- Supabase MCP project
 - Polar.sh account for subscriptions
 - Gemini API key for AI features
-- Google OAuth credentials (optional)
 
 ### Installation
 
@@ -225,46 +220,32 @@ npm install
 3. **Environment Setup**
 Create a `.env.local` file with:
 ```env
-# Database
-DATABASE_URL="your-neon-database-url"
+# Supabase MCP Configuration
+NEXT_PUBLIC_SUPABASE_URL="your_supabase_url_here"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="your_supabase_anon_key_here" 
+SERVICE_ROLE="your_supabase_service_role_key_here"
 
-# Authentication
-BETTER_AUTH_SECRET="your-secret-key"
-GOOGLE_CLIENT_ID="your-google-client-id"
-GOOGLE_CLIENT_SECRET="your-google-client-secret"
+# Google Gemini API
+GEMINI_API_KEY="your_gemini_api_key_here"
+GOOGLE_GENERATIVE_AI_API_KEY="your_gemini_api_key_here"
 
 # Polar.sh
-POLAR_ACCESS_TOKEN="your-polar-access-token"
-POLAR_WEBHOOK_SECRET="your-webhook-secret"
-
-# OpenAI
-OPENAI_API_KEY="your-openai-api-key"
-
-# Cloudflare R2 Storage
-CLOUDFLARE_ACCOUNT_ID="your-cloudflare-account-id"
-R2_UPLOAD_IMAGE_ACCESS_KEY_ID="your-r2-access-key-id"
-R2_UPLOAD_IMAGE_SECRET_ACCESS_KEY="your-r2-secret-access-key"
-R2_UPLOAD_IMAGE_BUCKET_NAME="your-r2-bucket-name"
-
-# Polar.sh Pricing Tiers
-NEXT_PUBLIC_STARTER_TIER="your-starter-product-id"
-NEXT_PUBLIC_STARTER_SLUG="your-starter-slug"
+POLAR_ACCESS_TOKEN="your_polar_access_token_here"
 ```
 
 ```
 
-5. **Cloudflare R2 Setup**
-- Create a Cloudflare account and set up R2 storage
-- Create a bucket for file uploads
-- Generate API tokens with R2 permissions
-- Configure CORS settings for your domain
+4. **Supabase MCP Setup**
+- Create a project at [Supabase](https://supabase.com/)
+- Copy your project URL and anon key from the project settings
+- Configure the MCP server integration
 
-6. **Polar.sh Setup**
+5. **Polar.sh Setup**
 - Create products for your pricing tiers
 - Set up webhook endpoints for subscription events
 - Configure your pricing structure
 
-7. **Start Development Server**
+6. **Start Development Server**
 ```bash
 npm run dev
 ```
@@ -280,17 +261,9 @@ Open [http://localhost:3000](http://localhost:3000) to see your application.
 - Webhook handling for real-time updates
 
 ### AI Chat Integration
-- Built-in chatbot with OpenAI
+- Built-in chatbot with Google Gemini
 - Markdown rendering for rich responses
 - Conversation history and context
-
-### File Upload System
-- **Cloudflare R2 integration** with S3-compatible API
-- **Drag & drop interface** with visual feedback
-- **File validation** - Type checking and size limits
-- **Progress tracking** - Real-time upload progress
-- **Image gallery** - View uploaded files with metadata
-- **Copy URLs** - Easy sharing and integration
 
 ### Analytics & Tracking
 - PostHog event tracking
@@ -312,15 +285,15 @@ Open [http://localhost:3000](http://localhost:3000) to see your application.
 
 ### Authentication
 - Configure providers in `lib/auth/auth.ts`
-- Add new OAuth providers as needed
+- Add new OAuth providers as needed through Supabase MCP
 - Customize user profile fields in database schema
 
 ## 📚 Learn More
 
 - [Next.js Documentation](https://nextjs.org/docs)
-- [Better Auth Documentation](https://better-auth.com)
+- [Supabase MCP Documentation](https://supabase.com/docs)
 - [Polar.sh Documentation](https://docs.polar.sh)
-- [Drizzle ORM Documentation](https://orm.drizzle.team)
+- [Google Gemini Documentation](https://ai.google.dev/)
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 
 ## 🚀 Deployment
@@ -369,12 +342,17 @@ The application includes an AI-powered chat feature using Google's Gemini 2.5 Fl
 Before running the application, you need to set up the following environment variables:
 
 ```bash
-# Supabase Configuration
+# Supabase MCP Configuration
 NEXT_PUBLIC_SUPABASE_URL="your_supabase_url_here"
 NEXT_PUBLIC_SUPABASE_ANON_KEY="your_supabase_anon_key_here"
+SERVICE_ROLE="your_supabase_service_role_key_here"
 
 # Google Gemini API
 GEMINI_API_KEY="your_gemini_api_key_here"
+GOOGLE_GENERATIVE_AI_API_KEY="your_gemini_api_key_here"
+
+# Polar.sh
+POLAR_ACCESS_TOKEN="your_polar_access_token_here"
 ```
 
 ### Getting API Keys
@@ -384,8 +362,9 @@ GEMINI_API_KEY="your_gemini_api_key_here"
    - Create a new API key
    - Add it to your `.env.local` file as `GEMINI_API_KEY`
 
-2. **Supabase Configuration**:
+2. **Supabase MCP Configuration**:
    - Create a project at [Supabase](https://supabase.com/)
    - Copy your project URL and anon key from the project settings
+   - Set up MCP server integration
 
 ## Authentication
