@@ -128,14 +128,7 @@ The project uses several other libraries and utilities:
 - `uploadthing`: For handling file uploads.
 - `polar-sh/sdk`: For integrating with the Polar subscription service.
 
-## ✨ Features
 
-### 🔐 Authentication & User Management
-- **Better Auth v1.2.8** - Modern authentication system
-- Google OAuth integration
-- Session management with database persistence
-- User profile management with image uploads
-- Account linking for multiple providers
 
 ### 💳 Subscription & Billing
 - **Polar.sh** integration for subscription management
@@ -146,7 +139,7 @@ The project uses several other libraries and utilities:
 - Payment gating with elegant overlays
 
 ### 🤖 AI Integration
-- **OpenAI** powered chatbot
+- **Gemini** powered chatbot
 - React Markdown rendering for rich responses
 - Multi-step conversation support
 - Integrated chat widget in dashboard
@@ -159,12 +152,7 @@ The project uses several other libraries and utilities:
 - Responsive design with mobile-first approach
 - Loading skeletons and optimistic UI updates
 
-### 🗄️ Database & Storage
-- **Neon PostgreSQL** - Serverless database
-- **Drizzle ORM** - Type-safe database toolkit
-- **Cloudflare R2** - Scalable file storage with zero egress fees
-- Database migrations with Drizzle Kit
-- Drag & drop file uploads with progress tracking
+
 
 ### 📊 Analytics & Monitoring
 - **PostHog** integration for product analytics
@@ -177,8 +165,9 @@ The project uses several other libraries and utilities:
 - **Framework**: Next.js 15.3.1 with App Router
 - **Language**: TypeScript with strict mode
 - **Styling**: Tailwind CSS v4 + shadcn/ui
-- **Database**: Neon PostgreSQL + Drizzle ORM
-- **Authentication**: Better Auth v1.2.8
+- **Database**: Supabase
+- **Authentication**: Supabase
+
 - **Payments**: Polar.sh
 - **AI**: OpenAI SDK
 - **Storage**: Cloudflare R2
@@ -214,10 +203,10 @@ The project uses several other libraries and utilities:
 
 ### Prerequisites
 - Node.js 18+
-- PostgreSQL database (Neon recommended)
+- Supabase MCPS
 - Cloudflare R2 bucket for file storage
 - Polar.sh account for subscriptions
-- OpenAI API key for AI features
+- Gemini API key for AI features
 - Google OAuth credentials (optional)
 
 ### Installation
@@ -262,11 +251,6 @@ NEXT_PUBLIC_STARTER_TIER="your-starter-product-id"
 NEXT_PUBLIC_STARTER_SLUG="your-starter-slug"
 ```
 
-4. **Database Setup**
-```bash
-# Generate and run migrations
-npx drizzle-kit generate
-npx drizzle-kit push
 ```
 
 5. **Cloudflare R2 Setup**
