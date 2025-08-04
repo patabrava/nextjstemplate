@@ -9,11 +9,12 @@ The project is built with a modern web technology stack, including:
 -   **Framework:** Next.js 15.3.1 with App Router
 -   **Language:** TypeScript
 -   **Styling:** Tailwind CSS v4 + Shadcn UI
--   **Authentication:** Supabase MCP
--   **Database:** Supabase MCP
--   **AI Integration:** Google Gemini
+-   **Authentication:** Supabase Auth (with Supabase MCP for database operations)
+-   **Database:** Supabase (PostgreSQL)
+-   **AI Integration:** Google Gemini via AI SDK
+-   **File Storage:** Cloudflare R2
 -   **Subscription Management:** Polar.sh
--   **Analytics:** PostHog
+-   **Analytics:** PostHog + Vercel Analytics
 
 ## 2. Project Structure
 
@@ -28,7 +29,7 @@ nextjs-starter-kit/
 │   ├── dashboard/        # Dashboard pages (protected routes)
 │   │   ├── _components/  # Dashboard-specific components
 │   │   ├── chat/         # AI chat interface
-│   │   ├── upload/       # File upload with R2
+│   │   ├── upload/       # File upload with Cloudflare R2
 │   │   ├── payment/      # Subscription management
 │   │   └── settings/     # User settings & billing
 │   ├── pricing/          # Public pricing page
@@ -41,9 +42,11 @@ nextjs-starter-kit/
 │   └── schema.ts         # Database schema definitions
 ├── hooks/                # Custom React hooks
 ├── lib/                  # Library functions and utilities
-│   ├── auth/             # Authentication-related functions and configuration
-│   ├── supabase/         # Supabase MCP client configuration
+│   ├── auth-client.ts    # Client-side authentication utilities
+│   ├── auth.ts           # Server-side authentication utilities  
+│   ├── supabase/         # Supabase client configuration
 │   ├── subscription.ts   # Subscription utilities
+│   ├── upload-image.ts   # Cloudflare R2 file upload utilities
 │   └── utils.ts          # General utility functions
 ├── public/               # Static assets
 └── ...
@@ -55,10 +58,10 @@ The starter kit provides a comprehensive set of features for building a modern w
 
 ### 3.1. Authentication & User Management
 
--   Supabase MCP authentication system
+-   Supabase Auth with Google OAuth provider
 -   Session management with database persistence
 -   User profile management
--   Account linking for multiple providers
+-   Protected route middleware
 
 ### 3.2. Subscription & Billing
 
@@ -71,11 +74,11 @@ The starter kit provides a comprehensive set of features for building a modern w
 
 ### 3.3. AI Integration
 
--   AI-powered chatbot using Google Gemini
+-   AI-powered chatbot using Google Gemini via AI SDK
+-   Streaming responses for real-time chat experience
 -   React Markdown rendering for rich responses
 -   Multi-step conversation support
 -   Integrated chat widget in dashboard
--   Real-time streaming for responsive chat experience
 -   Robust error handling and loading states
 
 ### 3.4. Modern UI/UX
@@ -89,11 +92,14 @@ The starter kit provides a comprehensive set of features for building a modern w
 
 ### 3.5. Database & Storage
 
--   Supabase MCP as the database solution
+-   Supabase PostgreSQL database with TypeScript interfaces
+-   Cloudflare R2 for image and file storage
+-   S3-compatible API for seamless file operations
 
 ### 3.6. Analytics & Monitoring
 
 -   PostHog integration for product analytics
+-   Vercel Analytics for web analytics
 -   User behavior tracking
 -   Custom event monitoring
 -   Error tracking and insights
@@ -101,12 +107,13 @@ The starter kit provides a comprehensive set of features for building a modern w
 ## 4. Data Flow and Interactions
 
 -   **Frontend (Next.js App Router):** Handles routing, UI rendering, and client-side interactions.
--   **API Routes (`app/api`):** Serve as backend endpoints for handling authentication, chat requests, subscription webhooks. These routes interact with external services and the database.
--   **Authentication:** `middleware.ts` protects routes by checking for valid sessions. `lib/auth.ts` provides helper functions for user and session management.
--   **Database (`db/schema.ts`):** Defines the database schema and handles database connections and queries via Supabase MCP.
+-   **API Routes (`app/api`):** Serve as backend endpoints for handling authentication, chat requests, file uploads, subscription webhooks. These routes interact with external services and the database.
+-   **Authentication:** `middleware.ts` protects routes by checking for valid sessions. `lib/auth.ts` provides helper functions for user and session management using Supabase Auth.
+-   **Database (`db/schema.ts`):** Defines TypeScript interfaces for database entities and handles database connections via Supabase.
 -   **External Services:**
-    -   **Google Gemini API:** Integrated for AI chat functionality.
+    -   **Google Gemini API:** Integrated via AI SDK for streaming AI chat functionality.
+    -   **Cloudflare R2:** S3-compatible storage for file uploads with public access.
     -   **Polar.sh:** Manages subscriptions and billing, with webhooks for real-time updates.
-    -   **PostHog:** For analytics and user behavior tracking.
+    -   **PostHog & Vercel Analytics:** For comprehensive analytics and user behavior tracking.
 
 This architecture provides a robust and scalable foundation for a modern SaaS application, leveraging serverless technologies and a component-based UI approach.

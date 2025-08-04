@@ -6,9 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "mcp:start": "@supabase/mcp-server-supabase",
-    "mcp:test": "node .vscode/test-mcp.js"
+    "lint": "next lint"
+    
   },
   "dependencies": {
     "@ai-sdk/google": "^1.2.22",
