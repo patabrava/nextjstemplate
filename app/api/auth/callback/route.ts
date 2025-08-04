@@ -7,16 +7,21 @@ export async function GET(request: Request) {
   const code = searchParams.get('code')
   const error = searchParams.get('error')
   const errorDescription = searchParams.get('error_description')
+  const acceptedTerms = searchParams.get('accepted_terms')
+  const dataConsent = searchParams.get('data_consent')
   // if "next" is in param, use it as the redirect URL
   const next = searchParams.get('next') ?? '/dashboard'
 
-  console.log('Auth callback received:', {
+  console.log('🔍 Auth callback received:', {
     code: code ? 'present' : 'missing',
     error,
     errorDescription,
+    acceptedTerms,
+    dataConsent,
     origin,
     next,
-    fullUrl: request.url
+    fullUrl: request.url,
+    timestamp: new Date().toISOString()
   })
 
   // Handle OAuth errors from provider
@@ -44,6 +49,31 @@ export async function GET(request: Request) {
       }
 
       if (data.session) {
+        // If we have consent data from signup, update the user metadata
+        if (acceptedTerms !== null || dataConsent !== null) {
+          try {
+            console.log('Updating user metadata with consent data:', {
+              accepted_terms: acceptedTerms === 'true',
+              data_consent: dataConsent === 'true'
+            })
+            
+            const { error: updateError } = await supabase.auth.updateUser({
+              data: {
+                accepted_terms: acceptedTerms === 'true',
+                data_consent: dataConsent === 'true',
+              }
+            })
+            
+            if (updateError) {
+              console.error('Error updating user metadata:', updateError)
+              // Don't fail the auth flow, but log the error
+            }
+          } catch (metadataError) {
+            console.error('Error updating user metadata:', metadataError)
+            // Don't fail the auth flow for metadata errors
+          }
+        }
+        
         console.log('Auth successful, redirecting to:', next)
         return NextResponse.redirect(`${origin}${next}`)
       }
